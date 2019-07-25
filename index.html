@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Title</title>
+    <title>Math for ML Bootcamp</title>
 
     <meta charset="utf-8">
     <script src="slides.js"></script>
+    <script type="text/javascript" async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
   </head>
   
   <style>
@@ -40,28 +42,282 @@ div.snippet > div.label {
       
       <article>
         <h1>
-          Title
-          <div style="font-size: smaller">Subtitle</div>
+          Math for ML Bootcamp
+          <div style="font-size: smaller">Linear Algebra in Tensorflow</div>
         </h1>
-        <p>Date</p>
+        <p>2019-07-25</p>
       </article>
 
       <article>
-        <h2>Separator Slide</h2>
-      </article>
-
-      <article>
-        <h3>Text Slide</h3>
+        <h3>Outline</h3>
         <ul>
-          <li>Bullet Point</li>
+          <li>Tensor-like data structures and linear algebra</li>
+          <li>TensorFlow colab: data flow graphs</li>
+          <li>TensorFlow colab: data flow graphs for ML</li>
         </ul>
       </article>
 
       <article>
-        <pre>
-Code
-        </pre>
+        <h3>Motto</h3>
+        <p>Three sources of new knowledge:</p>
+        <ol class="build">
+          <li>Things you didn't know.</li>
+          <li>Things you thought of as different that you realize are the same.</li>
+          <li>Things you thought of as the same that you realize are different.</li>
+        </ol>
+      </article>
+
+      <article>
+        <h2>Tensor-like data structures, relation to linear
+          algebra, working in colab</h2>
+      </article>
+
+      <article>
+        <h3>A few "same" things</h3>
+        <ul>
+          <li>Vectors vs. Coordinate Tuples vs. Batches of Numbers</li>
+          <li>Vectors vs. Points</li>
+          <li>Scalars vs. Vectors vs. Matrices vs. Tensors</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Vectors</h3>
+        <ul>
+          <li>Elements of a vector space</li>
+          <li>Addition and scalar multiplication is defined</li>
+          <li>Scalars <em>are</em> numbers, but vectors don't have to be. E.g., arrows.</em>
+          <li>\(R_n\) is a Vector Space over \(R\)</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Coordinate Tuples</h3>
+        <ul class="build">
+          <li>Linear Combinations and Linear Independency yields the concepts
+            of <em>Basis</em> and <em>Coordinates</em></li>
+          <li>Any vector is an unambiguous linear combination of Basis Vectors</li>
+          <li>Coefficients are called <em>coordinates</em>, which represent the vector</li>
+          <li>The same vector has different coordinates in different Bases</li>
+          <li>But it's the same vector</li>
+          <li>A Vector from \(R^n\) looks like a coordinate tuple</li>
+          <li>N-dimensional vector space is isomorphic to \(R^n\)</li>
+          <li>Subtle distinctions,
+            e.g., <a href="https://docs.google.com/presentation/d/1m-ugRicgPN0ZWPItXMfQ67ms9nyAl2tjGpgbzFLYYG4/present?slide=id.g24e49eb322_0_22">\(L_1\)
+            norm</a> is a function of the \(R^n\) vector, not its
+            coordinates.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Batches of numbers</h3>
+        <ul>
+          <li>May look like vectors or coordinate tuples</li>
+          <li>If they don't transform with Basis changes, they are no coordinates</li>
+          <li>If they don't linearly combine, they are not vectors</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Points and Vectors</h3>
+        <ul>
+          <li>Points in space are often represented as Vectors from Origin</li>
+          <li>Vectors can be added</li>
+          <li>So, what does it mean to add two Points?</li>
+          <li>Result depends on the choice of Origin</li>
+          <li>Better: The difference of Points is a Vector</li>
+          <li>Affine Space vs. Vector Space</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Scalars, Vectors, Matrices, Tensors</h3>
+        <ul>
+          <li>Defined by their coordinates:</li>
+          <li>Scalar: A single number</li>
+          <li>Vector: A tuple of numbers</li>
+          <li>Matrix: A 2-dimensional tuple of numbers</li>
+          <li>Tensor: An n-dimensional tuple of numbers</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Scalars, Vectors, Matrices, Tensors</h3>
+        <ul>
+          <li>To be coordinates of mathematical objects, they must transform
+            with respect to the Basis
+            \[\vec{\mathbf{e}}_{i^{\prime}} = T_{i^{\prime}}^{i}
+            \vec{\mathbf{e}}_{i}\]
+            \[x^{i^{\prime}} = T^{i^{\prime}}_{i}x^{i}\]
+            \[\vec{x} = x^{i^{\prime}}\vec{\mathbf{e}}_{i^{\prime}} = x^{i}\vec{\mathbf{e}}_{i}\]
+          </li>
+          <li>So there must be a Basis in the first place</li>
+          <li>A batch of vectors does not automatically transform as a Tensor</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Tensors - Origin</h3>
+        <ul class="build">
+          <li>Originally
+            from <a href="https://serc.carleton.edu/NAGTWorkshops/mineralogy/mineral_physics/tensors.html">Elasticity
+              theory</a>, to compute <em>tension</em> in a material under external
+            force.</li>
+          <li>Force is a vector</li>
+          <li>Leads to strain</li>
+          <li>But force in each direction leads to deformation in <em>every</em>
+            direction</li>
+          <li>3 x 3 coordinates</li>
+          <li>Generalization: Tensors.</li>
+          <li>every index runs over the dimensions of the vector space</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Tensorflow</h3>
+        <ul class="build">
+          <li>A library to compute with (very very large) coordinate
+          tuples.</li>
+          <li>Used in ML</li>
+          <li>Python API</li>
+          <li>Very scalable</li>
+          <li>Abstracts from hardware</li>
+          <li>Automatic differentiation</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Colab</h3>
+        <ul>
+          <li>Interactive environment for python</li>
+          <li>Especially to use tensorflow and other ML APIs</li>
+          <li>Online
+            at <a href="https://colab.corp.google.com">colab.corp.google.com</a></li>
+          <li>Runs IPython notebooks</li>
+          <li>Stores them in piper, driver, github.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Exercises</h3>
+        <p><a href="https://colab.corp.google.com/drive/1KKoH9KET0bMdu-HsX17Es775M3LE_0zr">Simple
+            Eager Mode</a></p>
+        <p><a href="https://colab.corp.google.com/drive/1K8e2vaBmT4-Q3pYIp6mp-L0-s80-dy7Y">Vectors
+            and Tensors</a></p>
+      </article>
+
+      <article>
+        <h2>Dataflow in Tensorflow</h2>
+      </article>
+
+      <article>
+        <h3>Tensorflow</h3>
+        <ul>
+          <li>Specify computation as a data flow graph</li>
+          <li>API separates graph construction from evaluation</li>
+          <li>Before evaluation, graph can be transformed</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Example Graph</h3>
+        \[\mathrm{ReLU}(M\mathbf{\vec{x}} + \mathbf{\vec{b}})\]
+        <img src="math-graph.svg">
       </article>
       
+      <article>
+        <h3>Exercises</h3>
+        <p><a href="https://colab.corp.google.com/drive/1saYYVxL2q7WWEH-XNpwL5xGnykvd5H-N">Simple
+            Graph Ops</a></p>
+        <p><a href="https://colab.corp.google.com/drive/1Q412F03pR7_Xi1vNxjJlTXjpaopqz1pD">Game
+            of Life Vectorized Computation</a></p>
+      </article>
+
+      <article>
+        <h2>Machine Learning in Tensorflow</h2>
+      </article>
+
+      <article>
+        <h3>Ingredients of Machine Learning</h3>
+        <ul>
+          <li>A vector of features as input</li>
+          <li>A prediction function to yield a label as output</li>
+          <li>A loss function</li>
+          <li>A strategy to minimize the loss function</li>
+          <li>Example feature data with known labels</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Machine Learning in Tensorflow</h3>
+        <ul>
+          <li>prediction functions with very many parameters</li>
+          <li>trained on very many examples</li>
+        </ul>
+        <p>Tensorflow helps:</p>
+        <ul>
+          <li>Running for large models and training data sets</li>
+          <li>Computing gradients on large models</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Neural Networks</h3>
+        <ul>
+          <li>A particular way to construct a prediction function</li>
+          <li>Modeled after Neurons</li>
+          <li>Stack of fully connected layers with activation functions</li>
+          <li><a href="https://docs.google.com/presentation/d/1bb73DZC9B68uFXSfoSSBd0qsCKrgZy2n5u0-hT9qDtY/present?slide=id.g1f933c325c_0_1092">(more)</a></li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Data flow graph</h3>
+        <ul>
+          <li>Before evaluation, graph can be transformed</li>
+          <li>Specifically, graph for the Loss function can be transformed to
+            compute gradient of Loss, for Gradient Descent training of ML models</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Where are the vectors?</h3>
+        <ul>
+          <li>Input</li>
+          <li>Intermediate layers</li>
+          <li>Output</li>
+          <li>Can be considered <em>embeddings</em></li>
+          <li>Useful to regard as points not vectors</li>
+        </ul>
+      </article>
+
+      <article>
+        <h3>Exercises</h3>
+        <ul>
+          <li><a href="https://colab.corp.google.com/drive/1m5Fv5NsZXSTpmcXWAefrelKz1IIuN1V-">Game
+              of Life Neural Network</a> Colab</li>
+          <li><a href="https://colab.corp.google.com/drive/1231BGu26wsg06JsG8Q3DpfqH3qHxls5R">MNIST
+              Handwriting Digits</a> Colab</li>
+          <li><a href="https://colab.corp.google.com/drive/1SDChsF-T0_B2_3QLjRmgP_0z7n-a0Y7w">Word2vec
+              Word Embedding</a> Colab</li>
+        </ul>
+      </article>
+
+      <article>
+        <h2>References</h2>
+      </article>
+
+      <article>
+        <h3>References</h3>
+        <ul>
+          <li>Tensorflow <a href="https://www.tensorflow.org/guide">Guide</a></li>
+          <li>Tensorflow <a href="https://www.tensorflow.org/tutorials">Tutorials</a></li>
+          <li><a href="https://docs.google.com/presentation/d/1JsqWLee0wBiXb7F-MIv04Rdl7hhXeQODKFp5rxLj6is/edit">Tensorflow
+          Code Retreat</a> Slides</li>
+          <li><a href="https://docs.google.com/presentation/d/1bb73DZC9B68uFXSfoSSBd0qsCKrgZy2n5u0-hT9qDtY/edit">MLCC</a> Slides</li>
+          <li><a href="https://docs.google.com/presentation/d/1m-ugRicgPN0ZWPItXMfQ67ms9nyAl2tjGpgbzFLYYG4/edit#slide=id.g24e49eb322_0_22">Math
+              for ML Linear Algebra</a> Slides</li>
+        </ul>
+      </article>
   </body>
 </html>
